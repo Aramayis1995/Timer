@@ -1,41 +1,35 @@
 const hour = document.querySelector(".hour");
 const minute = document.querySelector(".minute");
 const second = document.querySelector(".second");
-// let secondValue;
-// second.addEventListener("input", (e) => {
-//     secondValue = e.target.value;
-//     console.log(secondValue);
-// });
 let intervalId;
 const start = document.querySelector(".start");
 start.addEventListener("click", (e) => {
+  let hourValue = +hour.value;
+  let minuteValue = +minute.value;
+  let secondValue = +second.value;
+
   start.disabled = true;
   intervalId = setInterval((e) => {
-    console.log(second.value, minute.value, hour.value);
-
-    if (second.value === "0" && minute.value === "0" && hour.value === "0") {
+    if (!secondValue && !minuteValue && !hourValue) {
       clearInterval(intervalId);
-    }
-
-    if (second.value === "") {
-      second.value = "60";
-      minute.value--;
-    }
-
-    second.value--;
-
-    if (second.value - 1 < 0) {
-      second.value = "";
-      if (second.value === "" && minute.value === "") {
-        hour.value--;
-        minute.value = 59;
-        second.value = 59;
+    } else {
+      if (secondValue) {
+        secondValue--;
       }
-      if (second.value === "" && minute.value > "") {
-        minute.value--;
-        second.value = 59;
+      if (!secondValue && (minuteValue || hourValue)) {
+        secondValue = 59;
+        if (minuteValue) {
+          minuteValue--;
+        }
+        if (!minuteValue && hourValue) {
+          hourValue--;
+          minuteValue = 59;
+        }
       }
     }
+    second.value = secondValue || "00";
+    minute.value = minuteValue || "00";
+    hour.value = hourValue || "00";
   }, 1000);
 });
 
@@ -70,3 +64,5 @@ minute.addEventListener("focusout", () => {
     minute.value = minute.value % 60;
   }
 });
+
+// --------------- minute end-----------------------
